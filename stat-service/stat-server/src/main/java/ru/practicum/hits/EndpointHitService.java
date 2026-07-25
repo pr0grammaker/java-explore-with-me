@@ -1,5 +1,8 @@
 package ru.practicum.hits;
 
+import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.ViewStats;
+
 import java.util.Collection;
 import java.util.List;
 

@@ -11,7 +11,10 @@
 
     <artifactId>stat-service</artifactId>
     <packaging>pom</packaging>
+
     <modules>
+        <module>stat-common-libs</module>
+        <module>stat-client</module>
         <module>stat-server</module>
     </modules>
 
