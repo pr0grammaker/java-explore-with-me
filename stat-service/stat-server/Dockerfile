@@ -1,24 +1,18 @@
-# Используем официальный образ JDK для сборки
 FROM eclipse-temurin:21-jdk AS build
-
 WORKDIR /app
 
-# Копируем pom.xml и исходники
+RUN apt-get update && apt-get install -y maven
+
+# Копируем весь проект (чтобы были все модули)
 COPY . .
 
-# Собираем jar через Maven
-RUN ./mvnw clean package -DskipTests
+# Собираем stat-server вместе с зависимостями
+RUN mvn -pl stat-service/stat-server -am clean package -DskipTests -Dcheckstyle.skip
 
-# --- Runtime stage ---
 FROM eclipse-temurin:21-jre
-
 WORKDIR /app
 
-# Копируем jar из предыдущего этапа
-COPY --from=build /app/target/stat-server-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/stat-service/stat-server/target/stat-server-0.0.1-SNAPSHOT.jar app.jar
 
-# Указываем порт, который слушает приложение
 EXPOSE 9090
-
-# Запускаем Spring Boot приложение
 ENTRYPOINT ["java", "-jar", "app.jar"]
