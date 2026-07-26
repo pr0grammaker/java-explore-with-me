@@ -18,6 +18,7 @@
 <!--        <module>stat-service/stat-client</module>-->
 <!--		<module>stat-service/stat-server</module>-->
         <module>main-service</module>
+        <module>ewm-service</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
