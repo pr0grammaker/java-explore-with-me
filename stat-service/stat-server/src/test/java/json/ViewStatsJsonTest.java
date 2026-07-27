@@ -25,12 +25,8 @@ class ViewStatsJsonTest {
         JsonContent<ViewStats> result = json.write(stats);
 
         String expectedJson = """
-                {
-                  "app": "stats-service",
-                  "uri": "/items/42",
-                  "hits": 5
-                }
-                """;
+                {"app":"stats-service","uri":"/items/42","hits":5}""";
+
 
         assertThat(result).isEqualToJson(expectedJson);
     }
@@ -38,12 +34,8 @@ class ViewStatsJsonTest {
     @Test
     void deserializeViewStatsTest() throws Exception {
         String content = """
-                {
-                  "app": "stats-service",
-                  "uri": "/items/42",
-                  "hits": 5
-                }
-                """;
+                {"app":"stats-service","uri":"/items/42","hits":5}""";
+
 
         ViewStats parsed = json.parseObject(content);
 

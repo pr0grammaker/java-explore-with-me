@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
 @ContextConfiguration(classes = StatApplicationServer.class)
-public class EndpointHitDtoJson {
+public class EndpointHitDtoJsonTest {
 
     @Autowired
     private JacksonTester<EndpointHitDto> json;
@@ -35,13 +35,7 @@ public class EndpointHitDtoJson {
         JsonContent<EndpointHitDto> result = json.write(dto);
 
         String expectedJson = """
-                {
-                  "app": "stats-service",
-                  "uri": "/items/42",
-                  "ip": "192.168.0.1",
-                  "timestamp": "2026-07-26 12:30:00"
-                }
-                """;
+                {"app":"stats-service","uri":"/items/42","ip":"192.168.0.1","timestamp":"2026-07-26 12:30:00"}""";
 
         assertThat(result).isEqualToJson(expectedJson);
     }
@@ -49,13 +43,8 @@ public class EndpointHitDtoJson {
     @Test
     void deserializeEndpointHitDtoTest() throws Exception {
         String content = """
-                {
-                  "app": "stats-service",
-                  "uri": "/items/42",
-                  "ip": "192.168.0.1",
-                  "timestamp": "2026-07-26 12:30:00"
-                }
-                """;
+                {"app":"stats-service","uri":"/items/42","ip":"192.168.0.1","timestamp":"2026-07-26 12:30:00"}""";
+
 
         EndpointHitDto parsed = json.parseObject(content);
 
