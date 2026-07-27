@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface EndpointHitRepository extends JpaRepository<EndpointHit, Long> {
 
-
     // обычная статистика (считаем все хиты)
     @Query("SELECT new ru.practicum.dto.ViewStats(e.app, e.uri, COUNT(e)) " +
             "FROM EndpointHit e " +
