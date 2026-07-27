@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = StatApplicationServer.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@ActiveProfiles("test")
+@ActiveProfiles("ci")
 public class StatApplicationServerEndPointServiceTest {
 
     @Autowired
