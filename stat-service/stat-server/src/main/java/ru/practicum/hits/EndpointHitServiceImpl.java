@@ -29,7 +29,6 @@ public class EndpointHitServiceImpl implements EndpointHitService {
 
     @Override
     public Collection<ViewStats> get(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         if (unique) {
             return endpointHitRepository.findUniqueStats(start, end, uris);
