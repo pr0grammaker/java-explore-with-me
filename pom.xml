@@ -14,10 +14,6 @@
     <modules>
         <module>common-libs</module>
 	    <module>stat-service</module>
-<!--		<module>stat-service/stat-common-libs</module>-->
-<!--        <module>stat-service/stat-client</module>-->
-<!--		<module>stat-service/stat-server</module>-->
-        <module>main-service</module>
         <module>ewm-service</module>
     </modules>
 
