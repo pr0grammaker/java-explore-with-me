@@ -1,14 +1,56 @@
 services:
-  stats-server:
-    ports:
-      - "9090:9090"
-
   stats-db:
     image: postgres:16.1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: stats-db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  stats-server:
+    build:
+      context: .
+      dockerfile: stat-service/stat-server/Dockerfile
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+
+  swagger:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+      - "9091:8080"
+    environment:
+      API_URL: http://localhost:9090/v3/api-docs
 
   ewm-service:
+    build:
+      context: .
+      dockerfile: ewm-service/Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      - ewm-db
 
   ewm-db:
     image: postgres:16.1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: ewm-db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata-ewm:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  pgdata-ewm:

@@ -3,5 +3,9 @@
 		"-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
 		"https://checkstyle.org/dtds/suppressions_1_2.dtd">
 <suppressions>
+	<!-- Игнорируем все проверки для сгенерированных классов -->
 	<suppress checks=".*" files="target[\\/]generated-sources[\\/]"/>
+
+	<!-- Глобально отключаем правило Leading braces -->
+	<suppress checks="RegexpSinglelineJava" files=".*"/>
 </suppressions>
