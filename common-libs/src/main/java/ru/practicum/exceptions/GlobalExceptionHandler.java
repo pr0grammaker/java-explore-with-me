@@ -1,11 +1,13 @@
 package ru.practicum.exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
@@ -14,7 +16,15 @@ import java.util.Map;
 import java.util.Objects;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ResponseEntity<String> handleHttpClientError(HttpClientErrorException ex) {
+        log.error("HTTP error from server: {} {}\nStacktrace:",
+                ex.getStatusCode(), ex.getResponseBodyAsString(), ex);
+        return ResponseEntity.status(ex.getStatusCode()).body(ex.getResponseBodyAsString());
+    }
 
     @ExceptionHandler(ConditionsNotMetException.class)
     public ResponseEntity<Map<String, Object>> handleConditionsNotMet(ConditionsNotMetException ex) {
