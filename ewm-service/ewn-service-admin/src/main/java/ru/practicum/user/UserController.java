@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserController {
 
     private final UserService userService;
@@ -26,11 +28,13 @@ public class UserController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<UserDto> add(@Valid @RequestBody NewUserRequest newUserRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(newUserRequest));
     }
 
     @DeleteMapping("/{userId}")
+    @Transactional
     public ResponseEntity<Void> delete(@PathVariable("userId") Long userId) {
         userService.delete(userId);
 
