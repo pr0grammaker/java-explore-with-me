@@ -53,7 +53,7 @@ public class Event {
     private Boolean paid;
 
     @Column(name = "participant_limit")
-    private Long participantLimit = 0L; // ??? оставить здесь или лучше в контроллере
+    private Long participantLimit = 0L;
 
     @Column(name = "published_on")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
