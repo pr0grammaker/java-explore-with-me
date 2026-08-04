@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.DuplicatedDataException;
 import ru.practicum.exceptions.NotFoundException;
 
@@ -13,16 +14,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     @Override
+    @Transactional
     public UserDto addUser(NewUserRequest newUserRequest) {
-        if (userRepository.existsByName(newUserRequest.getName())) {
-            throw new DuplicatedDataException("Пользователь с таким именем уже существует");
-        }
 
         if (userRepository.existsByEmail(newUserRequest.getEmail())) {
             throw new DuplicatedDataException("Пользователь с таким email уже существует");
@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));

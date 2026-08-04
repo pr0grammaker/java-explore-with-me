@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.http.client.ParticipationRequestHttpClient;
 
 import java.util.Collection;
 
@@ -12,14 +13,14 @@ import java.util.Collection;
 @RequestMapping("/users/{userId}/requests")
 public class ParticipationRequestController {
 
-    private final ParticipationRequestService participationRequestService;
+    private final ParticipationRequestHttpClient participationRequestHttpClient;
 
     @GetMapping
     public ResponseEntity<Collection<ParticipationRequestDto>> getParticipationRequestsByUserId(
             @PathVariable("userId") Long userId
     ) {
-        return ResponseEntity.ok().body(participationRequestService
-                .getParticipationRequestsByUserId(userId));
+        return ResponseEntity.ok().body(participationRequestHttpClient
+                .getParticipationRequestsByUserId(userId).getBody());
     }
 
     @PostMapping
@@ -28,7 +29,7 @@ public class ParticipationRequestController {
             @RequestParam("eventId") Long eventId
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(participationRequestService.createParticipationRequest(userId, eventId));
+                .body(participationRequestHttpClient.createParticipationRequest(userId, eventId).getBody());
     }
 
     @PatchMapping("{requestId}/cancel")
@@ -36,7 +37,7 @@ public class ParticipationRequestController {
             @PathVariable("userId") Long userId,
             @PathVariable("requestId") Long requestId
     ) {
-        return ResponseEntity.ok().body(participationRequestService
-                .updateParticipationRequest(userId, requestId));
+        return ResponseEntity.ok().body(participationRequestHttpClient
+                .updateParticipationRequest(userId, requestId).getBody());
     }
 }

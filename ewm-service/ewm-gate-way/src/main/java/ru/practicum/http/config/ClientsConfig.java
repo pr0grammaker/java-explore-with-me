@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import ru.practicum.http.client.CategoryHttpAdminClient;
-import ru.practicum.http.client.CategoryHttpPublicClient;
-import ru.practicum.http.client.UserPrivateHttpClient;
+import ru.practicum.http.client.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -16,7 +14,7 @@ public class ClientsConfig {
 
     private final HttpServiceProxyFactory httpServiceProxyPublicFactory;
 
-//    private final HttpServiceProxyFactory httpServiceProxyPrivateFactory;
+    private final HttpServiceProxyFactory httpServiceProxyPrivateFactory;
 
     @Bean
     public CategoryHttpAdminClient adminClient() {
@@ -24,7 +22,7 @@ public class ClientsConfig {
     }
 
     @Bean
-    public UserPrivateHttpClient  userClient() {
+    public UserPrivateHttpClient userClient() {
         return httpServiceProxyAdminFactory.createClient(UserPrivateHttpClient.class);
     }
 
@@ -33,10 +31,35 @@ public class ClientsConfig {
         return httpServiceProxyPublicFactory.createClient(CategoryHttpPublicClient.class);
     }
 
-//    @Bean
-//    public CategoryHttpPrivateClient privateClient() {
-//        return httpServiceProxyPrivateFactory.createClient(CategoryHttpPrivateClient.class);
-//    }
+    @Bean
+    public EventPrivateHttpClient privateEventClient() {
+        return httpServiceProxyPrivateFactory.createClient(EventPrivateHttpClient.class);
+    }
+
+    @Bean
+    public ParticipationRequestHttpClient participationRequestClient() {
+        return httpServiceProxyPrivateFactory.createClient(ParticipationRequestHttpClient.class);
+    }
+
+    @Bean
+    public EventPublicHttpClient publicEventClient() {
+        return httpServiceProxyPublicFactory.createClient(EventPublicHttpClient.class);
+    }
+
+    @Bean
+    public EventAdminHttpClient eventAdminClient() {
+        return httpServiceProxyAdminFactory.createClient(EventAdminHttpClient.class);
+    }
+
+    @Bean
+    public CompilationAdminHttpClient compilationAdminClient() {
+        return httpServiceProxyAdminFactory.createClient(CompilationAdminHttpClient.class);
+    }
+
+    @Bean
+    public CompilationPublicHttpClient compilationPublicClient() {
+        return httpServiceProxyPublicFactory.createClient(CompilationPublicHttpClient.class);
+    }
 
 }
 

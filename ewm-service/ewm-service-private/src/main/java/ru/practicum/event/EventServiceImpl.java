@@ -19,6 +19,7 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -77,6 +78,16 @@ public class EventServiceImpl implements EventService {
                 .views(0L)
                 .build();
 
+        boolean exists = eventRepository.existsByLocationLatAndLocationLonAndEventDate(
+                event.getLocation().getLat(),
+                event.getLocation().getLon(),
+                event.getEventDate()
+        );
+        if (exists) {
+            throw new InvalidEventOperationException("На указанной локации уже запланировано событие на это время");
+        }
+
+
         eventRepository.save(event);
         return eventMapper.mapToEventFullDto(event);
     }
@@ -105,6 +116,10 @@ public class EventServiceImpl implements EventService {
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id = %d не найдено".formatted(eventId)));
+
+        if (!userId.equals(event.getInitiator().getId())) {
+            throw new InvalidEventOperationException("Пользователь не является инициатором события");
+        }
 
         if (event.getState() != EventState.CANCELED && event.getState() != EventState.PENDING) {
             throw new InvalidEventOperationException(
@@ -136,6 +151,20 @@ public class EventServiceImpl implements EventService {
             }
         }
 
+        if (updateEventUserRequest.getLocation() != null) {
+            event.setLocation(updateEventUserRequest.getLocation());
+        }
+
+        boolean exists = eventRepository.existsAnotherEventAtSamePlaceAndTime(
+                event.getLocation().getLat(),
+                event.getLocation().getLon(),
+                event.getEventDate(),
+                eventId
+        );
+        if (exists) {
+            throw new InvalidEventOperationException("На указанной локации уже запланировано событие на это время");
+        }
+
         if (updateEventUserRequest.getPaid() != null) {
             event.setPaid(updateEventUserRequest.getPaid());
         }
@@ -157,6 +186,7 @@ public class EventServiceImpl implements EventService {
                 );
             }
         }
+
         if (updateEventUserRequest.getTitle() != null) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
@@ -186,83 +216,83 @@ public class EventServiceImpl implements EventService {
                 .toList();
     }
 
-//    @Override
-//    @Transactional
-//    public EventRequestStatusUpdateResult updateUserEventRequestsByUserId(
-//            Long userId,
-//            Long eventId,
-//            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-//
-//        userRepository.findById(userId)
-//                .orElseThrow(() -> new NotFoundException("Пользователь с id = %d не найден".formatted(userId)));
-//
-//        Event event = eventRepository.findById(eventId)
-//                .orElseThrow(() -> new NotFoundException("Событие с id = %d не найдено".formatted(eventId)));
-//
-//        List<ParticipationRequest> requests = participationRequestRepository
-//                .findAllById(eventRequestStatusUpdateRequest.getRequestIds());
-//
-//        List<ParticipationRequestDto> confirmed = new ArrayList<>();
-//        List<ParticipationRequestDto> rejected = new ArrayList<>();
-//
-//        long confirmedCount = participationRequestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
-//
-//        for (ParticipationRequest request : requests) {
-//            if (!request.getEvent().getId().equals(eventId)) {
-//                throw new InvalidEventOperationException("Заявка id=%d не относится к событию id=%d"
-//                        .formatted(request.getId(), eventId));
-//            }
-//
-//            if (request.getStatus() != RequestStatus.PENDING) {
-//                throw new InvalidEventOperationException(
-//                        "Статус можно изменить только у заявок, находящихся в состоянии ожидания"
-//                );
-//            }
-//
-//            // Если лимит = 0 или модерация отключена → заявки подтверждаются автоматически
-//            if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
-//                request.setStatus(RequestStatus.CONFIRMED);
-//            } else {
-//                if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.CONFIRMED) {
-//                    if (confirmedCount >= event.getParticipantLimit()) {
-//                        throw new InvalidEventOperationException(
-//                                "Нельзя подтвердить заявку, лимит участников уже достигнут"
-//                        );
-//                    }
-//                    request.setStatus(RequestStatus.CONFIRMED);
-//                    confirmedCount++;
-//                } else if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.REJECTED) {
-//                    request.setStatus(RequestStatus.REJECTED);
-//                }
-//            }
-//
-//            participationRequestRepository.save(request);
-//            ParticipationRequestDto dto = participationRequestMapper.mapToDto(request);
-//
-//            if (request.getStatus() == RequestStatus.CONFIRMED) {
-//                confirmed.add(dto);
-//            } else if (request.getStatus() == RequestStatus.REJECTED) {
-//                rejected.add(dto);
-//            }
-//        }
-//
-//        // Если лимит исчерпан → отклоняем все оставшиеся PENDING
-//        if (event.getParticipantLimit() > 0 && confirmedCount >= event.getParticipantLimit()) {
-//            List<ParticipationRequest> pendingRequests = participationRequestRepository
-//                    .findByEventIdAndStatus(eventId, RequestStatus.PENDING);
-//
-//            for (ParticipationRequest pending : pendingRequests) {
-//                pending.setStatus(RequestStatus.REJECTED);
-//                participationRequestRepository.save(pending);
-//                rejected.add(participationRequestMapper.mapToDto(pending));
-//            }
-//        }
-//
-//        return EventRequestStatusUpdateResult.builder()
-//                .confirmedRequests(confirmed)
-//                .rejectedRequests(rejected)
-//                .build();
-//    }
+    @Override
+    @Transactional
+    public EventRequestStatusUpdateResult updateUserEventRequestsByUserId(
+            Long userId,
+            Long eventId,
+            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id = %d не найден".formatted(userId)));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id = %d не найдено".formatted(eventId)));
+
+        List<ParticipationRequest> requests = participationRequestRepository
+                .findAllById(eventRequestStatusUpdateRequest.getRequestIds());
+
+        List<ParticipationRequestDto> confirmed = new ArrayList<>();
+        List<ParticipationRequestDto> rejected = new ArrayList<>();
+
+        long confirmedCount = participationRequestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
+
+        for (ParticipationRequest request : requests) {
+            if (!request.getEvent().getId().equals(eventId)) {
+                throw new InvalidEventOperationException("Заявка id=%d не относится к событию id=%d"
+                        .formatted(request.getId(), eventId));
+            }
+
+            if (request.getStatus() != RequestStatus.PENDING) {
+                throw new InvalidEventOperationException(
+                        "Статус можно изменить только у заявок, находящихся в состоянии ожидания"
+                );
+            }
+
+            // Если лимит = 0 или модерация отключена → заявки подтверждаются автоматически
+            if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
+                request.setStatus(RequestStatus.CONFIRMED);
+            } else {
+                if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.CONFIRMED) {
+                    if (confirmedCount >= event.getParticipantLimit()) {
+                        throw new InvalidEventOperationException(
+                                "Нельзя подтвердить заявку, лимит участников уже достигнут"
+                        );
+                    }
+                    request.setStatus(RequestStatus.CONFIRMED);
+                    confirmedCount++;
+                } else if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.REJECTED) {
+                    request.setStatus(RequestStatus.REJECTED);
+                }
+            }
+
+            participationRequestRepository.save(request);
+            ParticipationRequestDto dto = participationRequestMapper.mapToDto(request);
+
+            if (request.getStatus() == RequestStatus.CONFIRMED) {
+                confirmed.add(dto);
+            } else if (request.getStatus() == RequestStatus.REJECTED) {
+                rejected.add(dto);
+            }
+        }
+
+        // Если лимит исчерпан → отклоняем все оставшиеся PENDING
+        if (event.getParticipantLimit() > 0 && confirmedCount >= event.getParticipantLimit()) {
+            List<ParticipationRequest> pendingRequests = participationRequestRepository
+                    .findByEventIdAndStatus(eventId, RequestStatus.PENDING);
+
+            for (ParticipationRequest pending : pendingRequests) {
+                pending.setStatus(RequestStatus.REJECTED);
+                participationRequestRepository.save(pending);
+                rejected.add(participationRequestMapper.mapToDto(pending));
+            }
+        }
+
+        return EventRequestStatusUpdateResult.builder()
+                .confirmedRequests(confirmed)
+                .rejectedRequests(rejected)
+                .build();
+    }
 
 
 }

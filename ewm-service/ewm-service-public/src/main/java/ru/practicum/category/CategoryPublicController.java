@@ -2,7 +2,6 @@ package ru.practicum.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -10,7 +9,6 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/categories")
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CategoryPublicController {
 
     private final CategoryService categoryService;

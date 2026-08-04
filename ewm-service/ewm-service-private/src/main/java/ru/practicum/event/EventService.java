@@ -16,6 +16,6 @@ public interface EventService {
 
     Collection<ParticipationRequestDto> getUserEventRequestsByUserId(Long userId, Long eventId);
 
-//    EventRequestStatusUpdateResult updateUserEventRequestsByUserId(
-//            Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
+    EventRequestStatusUpdateResult updateUserEventRequestsByUserId(
+            Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
 }

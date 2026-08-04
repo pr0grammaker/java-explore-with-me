@@ -2,11 +2,13 @@ package ru.practicum.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.DuplicatedDataException;
 import ru.practicum.exceptions.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     private final CategoryRepository categoryRepository;

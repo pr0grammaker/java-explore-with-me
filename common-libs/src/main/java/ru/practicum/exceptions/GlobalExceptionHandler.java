@@ -98,6 +98,17 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(InvalidEventOperationException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationEx(InvalidEventOperationException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", Instant.now());
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", HttpStatus.CONFLICT.getReasonPhrase());
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+    }
+
+
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<Map<String, Object>> handleOtherExceptions(Throwable throwable) {
         Map<String, Object> body = new HashMap<>();

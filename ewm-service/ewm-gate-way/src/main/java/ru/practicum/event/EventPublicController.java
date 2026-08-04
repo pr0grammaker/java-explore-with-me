@@ -1,10 +1,10 @@
 package ru.practicum.event;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.http.client.EventPublicHttpClient;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/events")
 public class EventPublicController {
-    private final EventPublicService service;
+    private final EventPublicHttpClient eventPublicHttpClient;
 
     @GetMapping
     public ResponseEntity<Collection<EventFullDto>> getAllEvents(
@@ -23,29 +23,20 @@ public class EventPublicController {
             @RequestParam boolean paid,
             @RequestParam String rangeStart,
             @RequestParam String rangeEnd,
-            @RequestParam(defaultValue = "false") boolean onlyAvailable,
+            @RequestParam boolean onlyAvailable,
             @RequestParam String sort,
             @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size,
-            HttpServletRequest request
+            @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok().body(
-                service.getAllEvents(text, categories, paid, rangeStart, rangeEnd,
-                        onlyAvailable, sort, from, size, request));
+                eventPublicHttpClient.getAllEvents(text, categories, paid, rangeStart, rangeEnd,
+                        onlyAvailable, sort, from, size).getBody());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<EventFullDto> getEventById(
-            @PathVariable("id") Long id,
-            HttpServletRequest request
+            @PathVariable("id") Long id
     ) {
-        return ResponseEntity.ok().body(service.getEventById(id, request));
+        return ResponseEntity.ok().body(eventPublicHttpClient.getEventById(id).getBody());
     }
-
-    @GetMapping("/some/path/{id}")
-    public void logIPAndPath(@PathVariable long id, HttpServletRequest request) {
-        log.info("client ip: {}", request.getRemoteAddr());
-        log.info("endpoint path: {}", request.getRequestURI());
-    }
-
 }
