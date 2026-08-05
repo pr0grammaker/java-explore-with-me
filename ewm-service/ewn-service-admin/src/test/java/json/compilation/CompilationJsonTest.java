@@ -34,36 +34,14 @@ public class CompilationJsonTest {
                 .paid(true)
                 .build();
 
-        assertThat(json.write(dto)).isEqualToJson("""
-                    {
-                      "id": 1,
-                      "title": "Новое событие",
-                      "annotation": "Аннотация",
-                      "category": {"id": 10, "name": "Концерт"},
-                      "initiator": {"id": 5, "name": "Иван Иванов"},
-                      "eventDate": "2024-12-31T15:10:05",
-                      "confirmedRequests": 5,
-                      "views": 100,
-                      "paid": true
-                    }
-                """);
+        assertThat(json.write(dto)).isEqualToJson(
+                "{\"id\":1,\"title\":\"Новое событие\",\"annotation\":\"Аннотация\",\"category\":{\"id\":10,\"name\":\"Концерт\"},\"initiator\":{\"id\":5,\"name\":\"Иван Иванов\"},\"eventDate\":\"2024-12-31T15:10:05\",\"confirmedRequests\":5,\"views\":100,\"paid\":true}"
+        );
     }
 
     @Test
     void testDeserializeEventCompilationDto() throws Exception {
-        String content = """
-                    {
-                      "id": 1,
-                      "title": "Новое событие",
-                      "annotation": "Аннотация",
-                      "category": {"id": 10, "name": "Концерт"},
-                      "initiator": {"id": 5, "name": "Иван Иванов"},
-                      "eventDate": "2024-12-31T15:10:05",
-                      "confirmedRequests": 5,
-                      "views": 100,
-                      "paid": true
-                    }
-                """;
+        String content = "{\"id\":1,\"title\":\"Новое событие\",\"annotation\":\"Аннотация\",\"category\":{\"id\":10,\"name\":\"Концерт\"},\"initiator\":{\"id\":5,\"name\":\"Иван Иванов\"},\"eventDate\":\"2024-12-31T15:10:05\",\"confirmedRequests\":5,\"views\":100,\"paid\":true}";
 
         EventCompilationDto parsed = json.parseObject(content);
 
@@ -75,4 +53,5 @@ public class CompilationJsonTest {
         assertThat(parsed.getViews()).isEqualTo(100L);
         assertThat(parsed.getPaid()).isTrue();
     }
+
 }

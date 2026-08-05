@@ -25,24 +25,13 @@ public class UserJsonTest {
     void testSerializeUserDto() throws Exception {
         UserDto dto = new UserDto("john.doe@example.com", 1L, "John Doe");
 
-        assertThat(userJson.write(dto)).isEqualToJson("""
-            {
-              "email": "john.doe@example.com",
-              "id": 1,
-              "name": "John Doe"
-            }
-        """);
+        assertThat(userJson.write(dto))
+                .isEqualToJson("{\"email\":\"john.doe@example.com\",\"id\":1,\"name\":\"John Doe\"}");
     }
 
     @Test
     void testDeserializeUserDto() throws Exception {
-        String content = """
-            {
-              "email": "john.doe@example.com",
-              "id": 1,
-              "name": "John Doe"
-            }
-        """;
+        String content = "{\"email\":\"john.doe@example.com\",\"id\":1,\"name\":\"John Doe\"}";
 
         UserDto parsed = userJson.parseObject(content);
 
@@ -57,28 +46,18 @@ public class UserJsonTest {
         req.setEmail("john.doe@example.com");
         req.setName("John Doe");
 
-        assertThat(newUserJson.write(req)).isEqualToJson("""
-            {
-              "email": "john.doe@example.com",
-              "name": "John Doe"
-            }
-        """);
+        assertThat(newUserJson.write(req))
+                .isEqualToJson("{\"email\":\"john.doe@example.com\",\"name\":\"John Doe\"}");
     }
 
     @Test
     void testDeserializeNewUserRequest() throws Exception {
-        String content = """
-            {
-              "email": "john.doe@example.com",
-              "name": "John Doe"
-            }
-        """;
+        String content = "{\"email\":\"john.doe@example.com\",\"name\":\"John Doe\"}";
 
         NewUserRequest parsed = newUserJson.parseObject(content);
 
         assertThat(parsed.getEmail()).isEqualTo("john.doe@example.com");
         assertThat(parsed.getName()).isEqualTo("John Doe");
     }
-
 
 }
