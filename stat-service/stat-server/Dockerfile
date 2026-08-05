@@ -17,4 +17,5 @@ COPY --from=build /app/stat-service/stat-server/target/stat-server-0.0.1-SNAPSHO
 ENV SPRING_PROFILES_ACTIVE=docker
 
 EXPOSE 9090
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar","--spring.config.name=application-docker"]
