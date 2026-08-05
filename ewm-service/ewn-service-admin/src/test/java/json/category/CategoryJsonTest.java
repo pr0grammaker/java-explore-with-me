@@ -26,20 +26,13 @@ public class CategoryJsonTest {
                 .name("Концерты")
                 .build();
 
-        assertThat(newCategoryJson.write(dto)).isEqualToJson("""
-                    {
-                      "name": "Концерты"
-                    }
-                """);
+        assertThat(newCategoryJson.write(dto))
+                .isEqualToJson("{\"name\":\"Концерты\"}");
     }
 
     @Test
     void testDeserializeNewCategoryDto() throws Exception {
-        String content = """
-                    {
-                      "name": "Фестивали"
-                    }
-                """;
+        String content = "{\"name\":\"Фестивали\"}";
 
         NewCategoryDto parsed = newCategoryJson.parseObject(content);
 
@@ -53,22 +46,13 @@ public class CategoryJsonTest {
                 .name("Концерты")
                 .build();
 
-        assertThat(categoryJson.write(dto)).isEqualToJson("""
-                    {
-                      "id": 1,
-                      "name": "Концерты"
-                    }
-                """);
+        assertThat(categoryJson.write(dto))
+                .isEqualToJson("{\"id\":1,\"name\":\"Концерты\"}");
     }
 
     @Test
     void testDeserializeCategoryDto() throws Exception {
-        String content = """
-                    {
-                      "id": 2,
-                      "name": "Фестивали"
-                    }
-                """;
+        String content = "{\"id\":2,\"name\":\"Фестивали\"}";
 
         CategoryDto parsed = categoryJson.parseObject(content);
 
