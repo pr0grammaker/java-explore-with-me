@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest(classes = PublicAppExploreWithMe.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("ci")
-public class PublicAppExploreWithMeEventAdminServiceTest {
+public class PublicAppExploreWithMeEventServiceTest {
 
     @Autowired
     private EventRepository eventRepository;

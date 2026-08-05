@@ -42,6 +42,6 @@ public class EventShortDto {
     private Boolean requestModeration = true;
 
     @NotBlank(message = "Заголовок события обязателен")
-    @Size(min = 1, max = 200, message = "Заголовок должен содержать от 1 до 200 символов")
+    @Size(min = 4, max = 50, message = "Заголовок должен содержать от 4 до 50 символов")
     private String title;
 }
