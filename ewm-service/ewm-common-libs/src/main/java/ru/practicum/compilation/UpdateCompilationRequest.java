@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 public class UpdateCompilationRequest {
 
-    // Список id событий для полной замены текущего списка
     private List<@NotNull @Positive Long> events;
 
     private Boolean pinned;

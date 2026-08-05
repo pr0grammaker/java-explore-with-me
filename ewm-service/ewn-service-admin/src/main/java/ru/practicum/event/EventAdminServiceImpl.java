@@ -72,12 +72,12 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         if (updateEventAdminRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
             if (event.getState() != EventState.PENDING) {
-                throw new InvalidEventOperationException
-                        ("Событие можно публиковать только если оно в состоянии ожидания публикации");
+                throw new InvalidEventOperationException(
+                        "Событие можно публиковать только если оно в состоянии ожидания публикации");
             }
             if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-                throw new InvalidEventOperationException
-                        ("Дата начала события должна быть не ранее чем за час от даты публикации");
+                throw new InvalidEventOperationException(
+                        "Дата начала события должна быть не ранее чем за час от даты публикации");
             }
             event.setState(EventState.PUBLISHED);
             event.setPublishedOn(LocalDateTime.now());

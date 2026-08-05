@@ -14,9 +14,7 @@ import java.util.List;
 @Builder
 public class EventRequestStatusUpdateResult {
 
-    // Список подтверждённых заявок
     private List<ParticipationRequestDto> confirmedRequests;
 
-    // Список отклонённых заявок
     private List<ParticipationRequestDto> rejectedRequests;
 }
