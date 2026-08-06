@@ -57,6 +57,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                               @Param("paid") Boolean paid,
                               @Param("end") LocalDateTime end,
                               Pageable pageable);
+
+
     @Query("SELECT e FROM Event e " +
             "WHERE (:users IS NULL OR e.initiator.id IN :users) " +
             "AND (:states IS NULL OR e.state IN :states) " +
