@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Event {
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 2000)
     private String annotation;
 
     @ManyToOne(fetch = FetchType.LAZY)

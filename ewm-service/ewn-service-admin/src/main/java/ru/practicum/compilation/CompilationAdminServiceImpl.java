@@ -8,6 +8,7 @@ import ru.practicum.event.*;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.participationrequest.ParticipationRequestRepository;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,10 @@ public class CompilationAdminServiceImpl implements CompilationAdminService {
 
     @Override
     public CompilationDto addCompilation(NewCompilationDto newCompilationDto) {
-        Set<Event> events = new HashSet<>(eventRepository.findAllById(newCompilationDto.getEvents()));
+
+        Set<Event> events = (newCompilationDto.getEvents() != null && !newCompilationDto.getEvents().isEmpty())
+                ? new HashSet<>(eventRepository.findAllById(newCompilationDto.getEvents()))
+                : Collections.emptySet();
 
         Compilation compilation = Compilation.builder()
                 .title(newCompilationDto.getTitle())

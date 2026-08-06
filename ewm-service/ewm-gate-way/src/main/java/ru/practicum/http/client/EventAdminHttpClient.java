@@ -22,9 +22,9 @@ public interface EventAdminHttpClient {
 
     @GetExchange
     ResponseEntity<Collection<EventFullDto>> getEvents(
-            @RequestParam List<Integer> users,
+            @RequestParam List<Long> users,
             @RequestParam List<String> states,
-            @RequestParam List<Integer> categories,
+            @RequestParam List<Long> categories,
             @RequestParam String rangeStart,
             @RequestParam String rangeEnd,
             @RequestParam(defaultValue = "0") int from,

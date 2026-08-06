@@ -18,7 +18,7 @@ public interface CompilationPublicHttpClient {
 
     @GetExchange
     ResponseEntity<Collection<CompilationDto>> getAllCompilations(
-            @RequestParam boolean pinned,
+            @RequestParam(defaultValue = "false", required = false) Boolean pinned,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size
     );

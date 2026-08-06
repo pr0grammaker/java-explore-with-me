@@ -46,7 +46,7 @@ public class EventPrivateController {
     public ResponseEntity<EventFullDto> updateUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
-            @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest
+            @Valid @RequestBody(required = false) UpdateEventUserRequest updateEventUserRequest
     ) {
         return ResponseEntity.ok().body(eventPrivateHttpClient
                 .updateUserEventById(userId, eventId, updateEventUserRequest).getBody());
@@ -65,7 +65,7 @@ public class EventPrivateController {
     public ResponseEntity<EventRequestStatusUpdateResult> updateUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
-            @Valid @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest
+            @Valid @RequestBody(required = false) EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest
     ) {
         return ResponseEntity.ok().body(eventPrivateHttpClient
                 .updateUserEventRequestsByUserId(userId, eventId, eventRequestStatusUpdateRequest).getBody());
