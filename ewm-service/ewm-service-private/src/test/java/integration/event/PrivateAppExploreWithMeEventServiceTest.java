@@ -237,7 +237,7 @@ public class PrivateAppExploreWithMeEventServiceTest {
                 .build());
 
         // здесь нормально работает если fixedDate указывать конкретное время
-        LocalDateTime fixedDate = LocalDateTime.of(2026, 8, 5, 23, 0, 0);
+        LocalDateTime fixedDate = LocalDateTime.of(2027, 8, 5, 23, 0, 0);
         Location fixedLocation = new Location(51.1694f, 71.4491f);
 
         EventShortDto dto1 = buildEventShortDto(category.getId(), fixedDate, "Событие 1");
@@ -556,7 +556,7 @@ public class PrivateAppExploreWithMeEventServiceTest {
                 eventService.updateUserEventRequestsByUserId(initiator.getId(), event.getId(), updateRequest);
 
         assertThat(result.getConfirmedRequests()).hasSize(1);
-        assertThat(result.getConfirmedRequests().getFirst().getStatus()).isEqualTo("CONFIRMED");
+        assertThat(result.getConfirmedRequests().get(0).getStatus()).isEqualTo("CONFIRMED");
     }
 
     @Test
@@ -583,7 +583,7 @@ public class PrivateAppExploreWithMeEventServiceTest {
                 eventService.updateUserEventRequestsByUserId(initiator.getId(), event.getId(), updateRequest);
 
         assertThat(result.getRejectedRequests()).hasSize(1);
-        assertThat(result.getRejectedRequests().getFirst().getStatus()).isEqualTo("REJECTED");
+        assertThat(result.getRejectedRequests().get(0).getStatus()).isEqualTo("REJECTED");
     }
 
     @Test

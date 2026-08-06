@@ -1,5 +1,6 @@
 package ru.practicum.event;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class EventAdminController {
     @PatchMapping("{eventId}")
     public ResponseEntity<EventFullDto> updateEvent(
             @PathVariable Long eventId,
-            @RequestBody UpdateEventAdminRequest updateEventAdminRequest
+            @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest
     ) {
         return ResponseEntity.ok()
                 .body(eventAdminHttpClient.updateEvent(eventId, updateEventAdminRequest).getBody());

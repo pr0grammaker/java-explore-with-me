@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 public interface EventAdminService {
-    Collection<EventFullDto> getEvents(List<Integer> users, List<String> states,
-                                       List<Integer> categories, String rangeStart,
+    Collection<EventFullDto> getEvents(List<Long> users, List<String> states,
+                                       List<Long> categories, String rangeStart,
                                        String rangeEnd, int from, int size);
 
 

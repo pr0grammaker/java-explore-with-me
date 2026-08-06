@@ -10,6 +10,7 @@ import ru.practicum.category.Category;
 import ru.practicum.category.CategoryRepository;
 import ru.practicum.exceptions.InvalidEventOperationException;
 import ru.practicum.exceptions.NotFoundException;
+import ru.practicum.exceptions.ValidationException;
 import ru.practicum.participationrequest.ParticipationRequestRepository;
 
 import java.time.LocalDateTime;
@@ -28,8 +29,8 @@ public class EventAdminServiceImpl implements EventAdminService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Collection<EventFullDto> getEvents(List<Integer> users, List<String> states,
-                                              List<Integer> categories, String rangeStart,
+    public Collection<EventFullDto> getEvents(List<Long> users, List<String> states,
+                                              List<Long> categories, String rangeStart,
                                               String rangeEnd, int from, int size) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -44,11 +45,12 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         Pageable pageable = PageRequest.of(from / size, size);
 
-        List<Long> userIds = users.stream().map(Long::valueOf).toList();
-        List<EventState> stateEnums = states.stream().map(EventState::valueOf).toList();
-        List<Long> categoryIds = categories.stream().map(Long::valueOf).toList();
+        List<EventState> stateEnums = (states != null && !states.isEmpty())
+                ? states.stream().map(EventState::valueOf).toList() : null;
+        List<Long> userIds = (users != null && !users.isEmpty()) ? users : null;
+        List<Long> categoryIds = (categories != null && !categories.isEmpty()) ? categories : null;
 
-        Page<Event> events = eventRepository.findByInitiatorIdInAndStateInAndCategoryIdInAndEventDateBetween(
+        Page<Event> events = eventRepository.findAllByAdminFilters(
                 userIds,
                 stateEnums,
                 categoryIds,
@@ -107,7 +109,7 @@ public class EventAdminServiceImpl implements EventAdminService {
 
         if (updateEventAdminRequest.getEventDate() != null) {
             if (updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new InvalidEventOperationException("Дата и время на которые намечено событие не может быть раньше, " +
+                throw new ValidationException("Дата и время на которые намечено событие не может быть раньше, " +
                         "чем через два часа от текущего момента");
             } else {
                 event.setEventDate(updateEventAdminRequest.getEventDate());

@@ -221,7 +221,14 @@ public class EventServiceImpl implements EventService {
     public EventRequestStatusUpdateResult updateUserEventRequestsByUserId(
             Long userId,
             Long eventId,
-            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+            EventRequestStatusUpdateRequest updateRequest) {
+
+        if (updateRequest == null || updateRequest.getRequestIds() == null || updateRequest.getRequestIds().isEmpty()) {
+            return EventRequestStatusUpdateResult.builder()
+                    .confirmedRequests(List.of())
+                    .rejectedRequests(List.of())
+                    .build();
+        }
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = %d не найден".formatted(userId)));
@@ -229,13 +236,19 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id = %d не найдено".formatted(eventId)));
 
+        long confirmedCount = participationRequestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
+
+        if (updateRequest.getStatus() == RequestStatus.CONFIRMED
+                && event.getParticipantLimit() > 0
+                && confirmedCount >= event.getParticipantLimit()) {
+            throw new InvalidEventOperationException("Нельзя подтвердить заявку, лимит участников уже достигнут");
+        }
+
         List<ParticipationRequest> requests = participationRequestRepository
-                .findAllById(eventRequestStatusUpdateRequest.getRequestIds());
+                .findAllById(updateRequest.getRequestIds());
 
         List<ParticipationRequestDto> confirmed = new ArrayList<>();
         List<ParticipationRequestDto> rejected = new ArrayList<>();
-
-        long confirmedCount = participationRequestRepository.countByEventIdAndStatus(eventId, RequestStatus.CONFIRMED);
 
         for (ParticipationRequest request : requests) {
             if (!request.getEvent().getId().equals(eventId)) {
@@ -249,34 +262,22 @@ public class EventServiceImpl implements EventService {
                 );
             }
 
-            // Если лимит = 0 или модерация отключена → заявки подтверждаются автоматически
-            if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
-                request.setStatus(RequestStatus.CONFIRMED);
-            } else {
-                if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.CONFIRMED) {
-                    if (confirmedCount >= event.getParticipantLimit()) {
-                        throw new InvalidEventOperationException(
-                                "Нельзя подтвердить заявку, лимит участников уже достигнут"
-                        );
-                    }
-                    request.setStatus(RequestStatus.CONFIRMED);
-                    confirmedCount++;
-                } else if (eventRequestStatusUpdateRequest.getStatus() == RequestStatus.REJECTED) {
-                    request.setStatus(RequestStatus.REJECTED);
+            if (updateRequest.getStatus() == RequestStatus.CONFIRMED) {
+                if (event.getParticipantLimit() > 0 && confirmedCount >= event.getParticipantLimit()) {
+                    throw new InvalidEventOperationException("Нельзя подтвердить заявку, лимит участников уже достигнут");
                 }
-            }
+                request.setStatus(RequestStatus.CONFIRMED);
+                confirmedCount++;
+                participationRequestRepository.save(request);
+                confirmed.add(participationRequestMapper.mapToDto(request));
 
-            participationRequestRepository.save(request);
-            ParticipationRequestDto dto = participationRequestMapper.mapToDto(request);
-
-            if (request.getStatus() == RequestStatus.CONFIRMED) {
-                confirmed.add(dto);
-            } else if (request.getStatus() == RequestStatus.REJECTED) {
-                rejected.add(dto);
+            } else if (updateRequest.getStatus() == RequestStatus.REJECTED) {
+                request.setStatus(RequestStatus.REJECTED);
+                participationRequestRepository.save(request);
+                rejected.add(participationRequestMapper.mapToDto(request));
             }
         }
 
-        // Если лимит исчерпан → отклоняем все оставшиеся PENDING
         if (event.getParticipantLimit() > 0 && confirmedCount >= event.getParticipantLimit()) {
             List<ParticipationRequest> pendingRequests = participationRequestRepository
                     .findByEventIdAndStatus(eventId, RequestStatus.PENDING);

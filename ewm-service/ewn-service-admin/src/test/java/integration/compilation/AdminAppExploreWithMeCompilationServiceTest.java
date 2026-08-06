@@ -199,7 +199,7 @@ public class AdminAppExploreWithMeCompilationServiceTest {
         CompilationDto updated = compilationAdminService.updateCompilation(dto.getId(), request);
 
         assertThat(updated.getEvents()).hasSize(2);
-        assertThat(updated.getEvents().getFirst().getTitle()).isIn("Событие 1", "Событие 2");
+        assertThat(updated.getEvents().get(0).getTitle()).isIn("Событие 1", "Событие 2");
     }
 
     @Test

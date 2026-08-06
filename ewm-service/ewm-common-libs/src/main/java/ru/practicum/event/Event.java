@@ -29,6 +29,7 @@ public class Event {
     private Long confirmedRequests;
 
     @Column(name = "created_on", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
     @Column(columnDefinition = "TEXT")

@@ -80,7 +80,7 @@ public class EventAdminControllerTest {
     @Test
     void getEvents_ReturnsEvents() throws Exception {
         when(eventAdminService.getEvents(
-                List.of(5), List.of("PUBLISHED"), List.of(10),
+                List.of(5L), List.of("PUBLISHED"), List.of(10L),
                 "2024-01-01 00:00:00", "2024-12-31 23:59:59", 0, 10))
                 .thenReturn(List.of(eventFullDto));
 
@@ -105,7 +105,7 @@ public class EventAdminControllerTest {
     @Test
     void getEvents_EmptyResult() throws Exception {
         when(eventAdminService.getEvents(
-                List.of(99), List.of("PUBLISHED"), List.of(99),
+                List.of(99L), List.of("PUBLISHED"), List.of(99L),
                 "2024-01-01 00:00:00", "2024-12-31 23:59:59", 0, 10))
                 .thenReturn(List.of());
 

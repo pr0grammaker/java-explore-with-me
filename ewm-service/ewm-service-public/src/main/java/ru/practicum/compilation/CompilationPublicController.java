@@ -15,7 +15,7 @@ public class CompilationPublicController {
 
     @GetMapping
     public ResponseEntity<Collection<CompilationDto>> getAllCompilations(
-            @RequestParam boolean pinned,
+            @RequestParam(required = false) Boolean pinned,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size
     ) {

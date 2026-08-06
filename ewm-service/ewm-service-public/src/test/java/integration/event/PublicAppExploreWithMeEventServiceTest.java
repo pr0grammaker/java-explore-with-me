@@ -12,7 +12,6 @@ import ru.practicum.PublicAppExploreWithMe;
 import ru.practicum.category.Category;
 import ru.practicum.category.CategoryRepository;
 import ru.practicum.event.*;
-import ru.practicum.exceptions.InvalidEventOperationException;
 import ru.practicum.exceptions.NotFoundException;
 import ru.practicum.http.client.EndpointHttpClient;
 import ru.practicum.user.User;
@@ -145,7 +144,7 @@ public class PublicAppExploreWithMeEventServiceTest {
         EventFullDto dto = createEventFullDto(EventState.PENDING, LocalDateTime.now().plusDays(1));
 
         assertThatThrownBy(() -> eventPublicService.getEventById(dto.getId(), new MockHttpServletRequest()))
-                .isInstanceOf(InvalidEventOperationException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("Событие должно быть опубликовано");
     }
 

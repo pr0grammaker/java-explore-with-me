@@ -2,6 +2,7 @@ package ru.practicum.category;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.http.client.CategoryHttpAdminClient;
@@ -14,7 +15,7 @@ public class CategoryAdminController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        return ResponseEntity.ok().body(categoryHttpAdminClient.addCategory(newCategoryDto).getBody());
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryHttpAdminClient.addCategory(newCategoryDto).getBody());
     }
 
     @DeleteMapping("{catId}")

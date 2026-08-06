@@ -44,7 +44,7 @@ public class EventController {
     public ResponseEntity<EventFullDto> updateUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
-            @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest
+            @Valid @RequestBody(required = false) UpdateEventUserRequest updateEventUserRequest
     ) {
         return ResponseEntity.ok().body(eventService.updateUserEventById(userId, eventId, updateEventUserRequest));
     }
@@ -61,7 +61,7 @@ public class EventController {
     public ResponseEntity<EventRequestStatusUpdateResult> updateUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
-            @Valid @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest
+            @Valid @RequestBody(required = false) EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest
     ) {
         return ResponseEntity.ok().body(eventService
                 .updateUserEventRequestsByUserId(userId, eventId, eventRequestStatusUpdateRequest));

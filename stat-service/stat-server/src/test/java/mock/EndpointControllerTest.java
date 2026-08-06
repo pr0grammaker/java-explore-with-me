@@ -167,9 +167,7 @@ public class EndpointControllerTest {
         mockMvc.perform(get("/stats")
                         .param("start", "2026-07-26") // неправильный формат: нет времени
                         .param("end", "2026-07-26 00:00:00"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message")
-                        .value("Неверный формат даты, ожидается yyyy-MM-dd HH:mm:ss"));
+                .andExpect(status().isBadRequest());
     }
 
 

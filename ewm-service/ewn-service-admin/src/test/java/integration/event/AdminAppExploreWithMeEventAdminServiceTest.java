@@ -145,9 +145,9 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
         EventFullDto dto = createEventFullDto(EventState.PUBLISHED, LocalDateTime.now().plusDays(1));
 
         var result = eventAdminService.getEvents(
-                List.of(dto.getInitiator().getId().intValue()),
+                List.of(dto.getInitiator().getId()),
                 List.of("PUBLISHED"),
-                List.of(dto.getCategory().getId().intValue()),
+                List.of(dto.getCategory().getId()),
                 "2026-08-01 00:00:00",
                 "2026-08-10 23:59:59",
                 0,
@@ -163,9 +163,9 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
         createEventFullDto(EventState.PUBLISHED, LocalDateTime.now().plusDays(1));
 
         var result = eventAdminService.getEvents(
-                List.of(999),
+                List.of(999L),
                 List.of("PUBLISHED"),
-                List.of(category.getId().intValue()),
+                List.of(category.getId()),
                 "2026-08-01 00:00:00",
                 "2026-08-10 23:59:59",
                 0,
@@ -181,9 +181,9 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
         createEventFullDto(EventState.PUBLISHED, LocalDateTime.of(2026, 8, 20, 12, 0));
 
         var result = eventAdminService.getEvents(
-                List.of(category.getId().intValue()), // инициатор id
+                List.of(category.getId()), // инициатор id
                 List.of("PUBLISHED"),
-                List.of(category.getId().intValue()),
+                List.of(category.getId()),
                 "2026-08-01 00:00:00",
                 "2026-08-10 23:59:59",
                 0,
@@ -201,9 +201,9 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
         }
 
         var page1 = eventAdminService.getEvents(
-                userRepository.findAll().stream().map(u -> u.getId().intValue()).toList(),
+                userRepository.findAll().stream().map(User::getId).toList(),
                 List.of("PUBLISHED"),
-                List.of(category.getId().intValue()),
+                List.of(category.getId()),
                 "2026-08-01 00:00:00",
                 "2026-08-30 23:59:59",
                 0,
@@ -211,9 +211,9 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
         );
 
         var page2 = eventAdminService.getEvents(
-                userRepository.findAll().stream().map(u -> u.getId().intValue()).toList(),
+                userRepository.findAll().stream().map(User::getId).toList(),
                 List.of("PUBLISHED"),
-                List.of(category.getId().intValue()),
+                List.of(category.getId()),
                 "2026-08-01 00:00:00",
                 "2026-08-30 23:59:59",
                 10,

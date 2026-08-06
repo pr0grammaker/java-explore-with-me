@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface EventPublicService {
     Collection<EventFullDto> getAllEvents(String text, List<Long> categories,
-                                          boolean paid, String rangeStart,
-                                          String rangeEnd, boolean onlyAvailable,
+                                          Boolean paid, String rangeStart,
+                                          String rangeEnd, Boolean onlyAvailable,
                                           String sort, int from, int size, HttpServletRequest request);
 
     EventFullDto getEventById(Long id, HttpServletRequest request);

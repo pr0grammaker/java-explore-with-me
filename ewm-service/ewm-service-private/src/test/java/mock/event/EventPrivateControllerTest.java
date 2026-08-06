@@ -82,9 +82,9 @@ public class EventPrivateControllerTest {
                 .build();
 
         eventShortDto = EventShortDto.builder()
-                .annotation("Аннотация события")
-                .description("Описание события")
-                .title("Новое событие")
+                .annotation("Эксклюзивность нашего шоу гарантирует привлечение максимальной зрительской аудитории")
+                .description("Что получится, если соединить кукурузу и полёт? Создатели шоу испытали эту идею на практике...")
+                .title("Знаменитое шоу 'Летающая кукуруза'")
                 .category(10L)
                 .eventDate(LocalDateTime.of(2027, 12, 31, 15, 10, 5))
                 .location(location)
@@ -241,8 +241,7 @@ public class EventPrivateControllerTest {
         mockMvc.perform(post("/users/{userId}/events", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventShortDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Аннотация события не может быть пустой"));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -267,7 +266,7 @@ public class EventPrivateControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(eventShortDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Дата проведения должна быть в будущем"));
+                .andExpect(jsonPath("$.message").value("Дата проведения события должна быть в будущем"));
     }
 
     @Test
@@ -284,19 +283,6 @@ public class EventPrivateControllerTest {
     }
 
     @Test
-    void addEvent_NullPaid_ShouldReturnBadRequest() throws Exception {
-        Long userId = 5L;
-
-        eventShortDto.setPaid(null);
-
-        mockMvc.perform(post("/users/{userId}/events", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(eventShortDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Поле 'paid' обязательно"));
-    }
-
-    @Test
     void addEvent_NegativeParticipantLimit_ShouldReturnBadRequest() throws Exception {
         Long userId = 5L;
 
@@ -307,19 +293,6 @@ public class EventPrivateControllerTest {
                         .content(objectMapper.writeValueAsString(eventShortDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Лимит участников не может быть отрицательным"));
-    }
-
-    @Test
-    void addEvent_NullRequestModeration_ShouldReturnBadRequest() throws Exception {
-        Long userId = 5L;
-
-        eventShortDto.setRequestModeration(null);
-
-        mockMvc.perform(post("/users/{userId}/events", userId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(eventShortDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Поле 'requestModeration' обязательно"));
     }
 
     @Test

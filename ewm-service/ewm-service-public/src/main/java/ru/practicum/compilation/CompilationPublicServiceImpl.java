@@ -28,10 +28,10 @@ public class CompilationPublicServiceImpl implements CompilationPublicService {
 
 
     @Override
-    public Collection<CompilationDto> getAllCompilations(boolean pinned, int from, int size) {
+    public Collection<CompilationDto> getAllCompilations(Boolean pinned, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").ascending());
 
-        List<Compilation> compilations = compilationRepository.findAllByPinned(pinned, pageable);
+        List<Compilation> compilations = compilationRepository.findAllByPinned(pinned, pageable).getContent();
 
         return compilations.stream()
                 .map(compilation -> {

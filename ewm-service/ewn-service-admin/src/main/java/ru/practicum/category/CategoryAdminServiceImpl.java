@@ -3,6 +3,8 @@ package ru.practicum.category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.event.EventRepository;
+import ru.practicum.exceptions.ConflictException;
 import ru.practicum.exceptions.DuplicatedDataException;
 import ru.practicum.exceptions.NotFoundException;
 
@@ -13,6 +15,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper mapper;
+
+    private final EventRepository eventRepository;
 
     @Override
     public CategoryDto addCategory(NewCategoryDto newCategoryDto) {
@@ -31,6 +35,10 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     public void deleteCat(Long catId) {
         categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена по id = " + catId));
+
+        if (eventRepository.existsByCategoryId(catId)) {
+            throw new ConflictException("Существуют события, связанные с этой категорией");
+        }
 
         categoryRepository.deleteById(catId);
     }

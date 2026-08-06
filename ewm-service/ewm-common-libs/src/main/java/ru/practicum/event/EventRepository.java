@@ -52,13 +52,25 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "AND (:categories IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND e.eventDate <= :end")
-    Page<Event> findAllBefore(String text, List<Long> categories, boolean paid, LocalDateTime end, Pageable pageable);
-
-
-    Page<Event> findByInitiatorIdInAndStateInAndCategoryIdInAndEventDateBetween(
-            List<Long> users, List<EventState> states, List<Long> categories,
-            LocalDateTime start, LocalDateTime end, Pageable pageable);
-
+    Page<Event> findAllBefore(@Param("text") String text,
+                              @Param("categories") List<Long> categories,
+                              @Param("paid") Boolean paid,
+                              @Param("end") LocalDateTime end,
+                              Pageable pageable);
+    @Query("SELECT e FROM Event e " +
+            "WHERE (:users IS NULL OR e.initiator.id IN :users) " +
+            "AND (:states IS NULL OR e.state IN :states) " +
+            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (cast(:start as timestamp) IS NULL OR e.eventDate >= :start) " +
+            "AND (cast(:end as timestamp) IS NULL OR e.eventDate <= :end)")
+    Page<Event> findAllByAdminFilters(
+            @Param("users") List<Long> users,
+            @Param("states") List<EventState> states,
+            @Param("categories") List<Long> categories,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
+            Pageable pageable
+    );
 
 
     @Query("SELECT COUNT(e) > 0 FROM Event e " +
@@ -73,4 +85,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 
     boolean existsByLocationLatAndLocationLonAndEventDate(Float lat, Float lon, LocalDateTime eventDate);
+
+    boolean existsByCategoryId(Long catId);
 }
