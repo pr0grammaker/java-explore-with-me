@@ -25,6 +25,7 @@ public interface EndpointHttpClient {
     @PostExchange("/hit")
     ResponseEntity<EndpointHitDto> saveHit(@Valid @RequestBody EndpointHitDto endpointHitDto);
 
+
     @GetExchange("/stats")
     ResponseEntity<Collection<ViewStats>> getStats(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
