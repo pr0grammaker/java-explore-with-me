@@ -9,7 +9,6 @@ import ru.practicum.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,23 +33,28 @@ public class EndpointHitServiceImpl implements EndpointHitService {
             throw new ValidationException("Дата начала не может быть позже даты окончания");
         }
 
-        List<String> formattedUris = (uris != null)
-                ? uris.stream()
-                .filter(u -> u != null && !u.isBlank())
-                .flatMap(u -> java.util.Arrays.stream(u.split(",")))
-                .map(String::trim)
-                .toList()
-                : Collections.emptyList();
+        List<String> targetUris = null;
+        if (uris != null && !uris.isEmpty()) {
+            targetUris = uris.stream()
+                    .filter(u -> u != null && !u.isBlank())
+                    .flatMap(u -> java.util.Arrays.stream(u.split(",")))
+                    .map(String::trim)
+                    .toList();
 
-        boolean hasUris = !formattedUris.isEmpty();
+            if (targetUris.isEmpty()) {
+                targetUris = null;
+            }
+        }
+
+        boolean hasUris = (targetUris != null);
 
         if (unique) {
             return hasUris
-                    ? endpointHitRepository.findUniqueStatsByUris(start, end, formattedUris)
+                    ? endpointHitRepository.findUniqueStatsByUris(start, end, targetUris)
                     : endpointHitRepository.findAllUniqueStats(start, end);
         } else {
             return hasUris
-                    ? endpointHitRepository.findStatsByUris(start, end, formattedUris)
+                    ? endpointHitRepository.findStatsByUris(start, end, targetUris)
                     : endpointHitRepository.findAllStats(start, end);
         }
     }

@@ -121,9 +121,6 @@ public class EventServiceImpl implements EventPublicService {
             throw new NotFoundException("Событие должно быть опубликовано");
         }
 
-        long confirmedRequests = participationRequestRepository.countByEventIdAndStatus(
-                find.getId(), RequestStatus.CONFIRMED);
-
         try {
             endpointHttpClient.saveHit(EndpointHitDto.builder()
                     .app("ewm-main-service")
@@ -131,18 +128,14 @@ public class EventServiceImpl implements EventPublicService {
                     .ip(request.getRemoteAddr())
                     .timestamp(LocalDateTime.now())
                     .build());
-
-            Thread.sleep(50);
         } catch (Exception e) {
             log.error("Failed to send stats: {}", e.getMessage());
         }
 
-        long views = getViewsCount(request.getRequestURI());
+        long confirmedRequests = participationRequestRepository.countByEventIdAndStatus(
+                find.getId(), RequestStatus.CONFIRMED);
 
-        // Если хит успешно отправлен, но статистика вернула 0 из-за асинхронности базы в тестах
-        if (views == 0) {
-            views = 1;
-        }
+        long views = getViewsCount(request.getRequestURI());
 
         return eventMapper.mapToEventFullDto(find, confirmedRequests, views);
     }

@@ -59,6 +59,7 @@ services:
       - "8081:8081"
     depends_on:
       - ewm-db
+      - stats-server
 
   ewm-public:
     build:
@@ -68,6 +69,7 @@ services:
       - "8082:8082"
     depends_on:
       - ewm-db
+      - stats-server
 
   ewm-private:
     build:
@@ -77,6 +79,7 @@ services:
       - "8083:8083"
     depends_on:
       - ewm-db
+      - stats-server
 
 volumes:
   pgdata:
