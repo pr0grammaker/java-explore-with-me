@@ -18,9 +18,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "     OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
-            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text)) " +
+            "     OR LOWER(e.description) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text))) " +
+            "AND (CAST(:categories AS text) IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND e.eventDate BETWEEN :start AND :end")
     Page<Event> findAllBetween(@Param("text") String text,
@@ -33,9 +33,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "     OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
-            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text)) " +
+            "     OR LOWER(e.description) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text))) " +
+            "AND (CAST(:categories AS text) IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND e.eventDate >= :start")
     Page<Event> findAllAfter(@Param("text") String text,
@@ -47,9 +47,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e " +
             "WHERE e.state = 'PUBLISHED' " +
-            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) " +
-            "     OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))) " +
-            "AND (:categories IS NULL OR e.category.id IN :categories) " +
+            "AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text)) " +
+            "     OR LOWER(e.description) LIKE LOWER(CAST(CONCAT('%', :text, '%') AS text))) " +
+            "AND (CAST(:categories AS text) IS NULL OR e.category.id IN :categories) " +
             "AND (:paid IS NULL OR e.paid = :paid) " +
             "AND e.eventDate <= :end")
     Page<Event> findAllBefore(@Param("text") String text,

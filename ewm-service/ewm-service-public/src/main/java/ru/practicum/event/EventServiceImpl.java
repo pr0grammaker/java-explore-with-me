@@ -20,7 +20,10 @@ import ru.practicum.participationrequest.ParticipationRequestRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -75,14 +78,22 @@ public class EventServiceImpl implements EventPublicService {
             events = eventRepository.findAllAfter(searchText, categoryIds, paid, LocalDateTime.now(), pageable);
         }
 
-        List<EventFullDto> result = events.stream()
+        List<Event> eventList = events.stream()
                 .filter(e -> !onlyAvailable || e.getParticipantLimit() == 0 ||
                         participationRequestRepository.countByEventIdAndStatus(e.getId(),
                                 RequestStatus.CONFIRMED) < e.getParticipantLimit())
+                .toList();
+
+        Map<String, Long> viewsMap = getViewsCountMap(eventList);
+
+        List<EventFullDto> result = eventList.stream()
                 .map(e -> {
-                    long confirmedRequests = participationRequestRepository.countByEventIdAndStatus(e.getId(),
-                            RequestStatus.CONFIRMED);
-                    return eventMapper.mapToEventFullDto(e, confirmedRequests, e.getViews());
+                    long confirmedRequests = participationRequestRepository.countByEventIdAndStatus(
+                            e.getId(), RequestStatus.CONFIRMED);
+                    String uri = "/events/" + e.getId();
+                    long views = viewsMap.getOrDefault(uri, 0L);
+
+                    return eventMapper.mapToEventFullDto(e, confirmedRequests, views);
                 })
                 .toList();
 
@@ -138,16 +149,53 @@ public class EventServiceImpl implements EventPublicService {
                     start,
                     end,
                     List.of(uri),
-                    false
+                    true
             );
 
-            if (response != null && response.getBody() != null && !response.getBody().isEmpty()) {
+            log.info("STATS RESPONSE: status={}, body={}", response.getStatusCode(), response.getBody());
+
+            if (response.getBody() != null && !response.getBody().isEmpty()) {
                 return response.getBody().iterator().next().getHits();
             }
         } catch (Exception e) {
             log.error("Ошибка при получении просмотров из stats-service: {}", e.getMessage());
         }
         return 0L;
+    }
+
+    private Map<String, Long> getViewsCountMap(List<Event> events) {
+        if (events.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        List<String> uris = events.stream()
+                .map(e -> "/events/" + e.getId())
+                .toList();
+
+        try {
+            LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
+            LocalDateTime end = LocalDateTime.now().plusDays(1);
+
+            ResponseEntity<Collection<ViewStats>> response = endpointHttpClient.getStats(
+                    start,
+                    end,
+                    uris,
+                    true
+            );
+
+            if (response != null && response.getBody() != null) {
+                return response.getBody().stream()
+                        .collect(Collectors.toMap(
+                                ViewStats::getUri,
+                                ViewStats::getHits,
+                                (v1, v2) -> v1
+                        ));
+            }
+        } catch (Exception e) {
+            log.error("Ошибка при получении массовой статистики из stats-service: {}", e.getMessage());
+        }
+
+        return Collections.emptyMap();
     }
 
 }
