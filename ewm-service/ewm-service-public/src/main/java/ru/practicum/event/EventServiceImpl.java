@@ -135,6 +135,11 @@ public class EventServiceImpl implements EventPublicService {
             log.error("Failed to send stats: {}", e.getMessage());
         }
 
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ignored) {
+        }
+
         long views = getViewsCount(request.getRequestURI());
 
         return eventMapper.mapToEventFullDto(find, confirmedRequests, views);
