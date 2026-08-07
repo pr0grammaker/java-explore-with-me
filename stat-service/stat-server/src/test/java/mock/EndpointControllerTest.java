@@ -81,16 +81,6 @@ public class EndpointControllerTest {
                 .andExpect(jsonPath("$.message").value("Название сервиса не должно быть пустым"));
     }
 
-    @Test
-    void saveHit_Fail_WhenUriInvalid() throws Exception {
-        endpointHitDto.setUri("items/42"); // uri должен начинатся с "/"
-
-        mockMvc.perform(post("/hit")
-                        .content(objectMapper.writeValueAsString(endpointHitDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("URI должен начинаться с '/' и содержать допустимые символы"));
-    }
 
     @Test
     void saveHit_Fail_WhenIpInvalid() throws Exception {

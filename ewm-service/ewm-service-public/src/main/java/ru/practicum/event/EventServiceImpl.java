@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventPublicService {
 
         try {
             EndpointHitDto endpoint = EndpointHitDto.builder()
-                    .app("ewm-service-public")
+                    .app("ewm-main-service")
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())
                     .timestamp(LocalDateTime.now())
@@ -126,11 +126,13 @@ public class EventServiceImpl implements EventPublicService {
 
         try {
             endpointHttpClient.saveHit(EndpointHitDto.builder()
-                    .app("ewm-service-public")
+                    .app("ewm-main-service")
                     .uri(request.getRequestURI())
                     .ip(request.getRemoteAddr())
                     .timestamp(LocalDateTime.now())
                     .build());
+
+            Thread.sleep(50);
         } catch (Exception e) {
             log.error("Failed to send stats: {}", e.getMessage());
         }

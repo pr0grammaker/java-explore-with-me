@@ -21,10 +21,6 @@ public class EndpointHitDto {
     private String app;   // Название сервиса
 
     @NotBlank(message = "URI не должен быть пустым")
-    @Pattern(
-            regexp = "^/[a-zA-Z0-9/_-]+$",
-            message = "URI должен начинаться с '/' и содержать допустимые символы"
-    )
     private String uri;   // URI эндпоинта
 
     @NotBlank(message = "IP-адрес не должен быть пустым")
