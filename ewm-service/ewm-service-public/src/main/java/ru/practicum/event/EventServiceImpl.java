@@ -148,7 +148,7 @@ public class EventServiceImpl implements EventPublicService {
     private long getViewsCount(String uri) {
         try {
             LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
-            LocalDateTime end = LocalDateTime.now().plusDays(1);
+            LocalDateTime end = LocalDateTime.of(2035, 1, 1, 0, 0, 0);
 
             ResponseEntity<Collection<ViewStats>> response = endpointHttpClient.getStats(
                     start,

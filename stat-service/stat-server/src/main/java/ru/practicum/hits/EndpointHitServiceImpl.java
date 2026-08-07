@@ -35,7 +35,11 @@ public class EndpointHitServiceImpl implements EndpointHitService {
         }
 
         List<String> formattedUris = (uris != null)
-                ? uris.stream().filter(u -> u != null && !u.isBlank()).toList()
+                ? uris.stream()
+                .filter(u -> u != null && !u.isBlank())
+                .flatMap(u -> java.util.Arrays.stream(u.split(",")))
+                .map(String::trim)
+                .toList()
                 : Collections.emptyList();
 
         boolean hasUris = !formattedUris.isEmpty();
