@@ -138,7 +138,7 @@ public class EventServiceImpl implements EventPublicService {
                     start,
                     end,
                     List.of(uri),
-                    true
+                    false
             );
 
             if (response != null && response.getBody() != null && !response.getBody().isEmpty()) {

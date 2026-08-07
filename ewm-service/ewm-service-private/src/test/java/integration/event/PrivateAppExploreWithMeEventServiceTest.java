@@ -415,7 +415,7 @@ public class PrivateAppExploreWithMeEventServiceTest {
         );
 
         assertThatThrownBy(() -> eventService.updateUserEventById(user.getId(), eventDto.getId(), updateRequest))
-                .isInstanceOf(InvalidEventOperationException.class)
+                .isInstanceOf(ConditionsNotMetException.class)
                 .hasMessageContaining("Дата и время на которые намечено событие не может быть раньше");
     }
 
