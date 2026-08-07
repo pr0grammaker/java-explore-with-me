@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.exceptions.ValidationException;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,11 +30,24 @@ public class EndpointHitServiceImpl implements EndpointHitService {
 
     @Override
     public Collection<ViewStats> get(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        if (start != null && end != null && start.isAfter(end)) {
+            throw new ValidationException("Дата начала не может быть позже даты окончания");
+        }
+
+        List<String> formattedUris = (uris != null)
+                ? uris.stream().filter(u -> u != null && !u.isBlank()).toList()
+                : Collections.emptyList();
+
+        boolean hasUris = !formattedUris.isEmpty();
 
         if (unique) {
-            return endpointHitRepository.findUniqueStats(start, end, uris);
+            return hasUris
+                    ? endpointHitRepository.findUniqueStatsByUris(start, end, formattedUris)
+                    : endpointHitRepository.findAllUniqueStats(start, end);
         } else {
-            return endpointHitRepository.findStats(start, end, uris);
+            return hasUris
+                    ? endpointHitRepository.findStatsByUris(start, end, formattedUris)
+                    : endpointHitRepository.findAllStats(start, end);
         }
     }
 }
