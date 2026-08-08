@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ewm-gate-way</artifactId>
+    <artifactId>ewm-gateway</artifactId>
     <packaging>jar</packaging>
 
     <properties>

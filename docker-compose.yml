@@ -34,7 +34,7 @@ services:
   ewm-service:
     build:
       context: .
-      dockerfile: ewm-service/ewm-gate-way/Dockerfile
+      dockerfile: ewm-service/ewm-gateway/Dockerfile
     ports:
       - "8080:8080"
     depends_on:

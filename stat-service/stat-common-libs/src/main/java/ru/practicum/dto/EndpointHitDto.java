@@ -3,11 +3,11 @@ package ru.practicum.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.validator.ValidIp;
 
 import java.time.LocalDateTime;
 
@@ -24,13 +24,7 @@ public class EndpointHitDto {
     private String uri;   // URI эндпоинта
 
     @NotBlank(message = "IP-адрес не должен быть пустым")
-    @Pattern(
-            regexp = "^(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\."
-                    + "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\."
-                    + "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\."
-                    + "(25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)$",
-            message = "IP-адрес должен быть в формате IPv4"
-    )
+    @ValidIp
     private String ip;    // IP пользователя
 
     @NotNull(message = "Дата и время запроса не могут быть null")

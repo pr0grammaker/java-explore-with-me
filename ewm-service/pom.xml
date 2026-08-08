@@ -15,7 +15,7 @@
         <module>ewn-service-admin</module>
         <module>ewm-common-libs</module>
         <module>ewm-service-public</module>
-        <module>ewm-gate-way</module>
+        <module>ewm-gateway</module>
         <module>ewm-service-private</module>
     </modules>
 
