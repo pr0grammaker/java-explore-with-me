@@ -3,6 +3,7 @@ package ru.practicum.event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -89,4 +90,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     boolean existsByLocationLatAndLocationLonAndEventDate(Float lat, Float lon, LocalDateTime eventDate);
 
     boolean existsByCategoryId(Long catId);
+
+    @Modifying
+    @Query("UPDATE Event e SET e.commentsCount = e.commentsCount + 1 WHERE e.id = :eventId")
+    void incrementCommentsCount(@Param("eventId") Long eventId);
+
+    @Modifying
+    @Query("UPDATE Event e SET e.commentsCount = e.commentsCount - 1 WHERE e.id = :eventId AND e.commentsCount > 0")
+    void decrementCommentsCount(@Param("eventId") Long eventId);
 }

@@ -191,6 +191,10 @@ public class EventServiceImpl implements EventService {
             event.setTitle(updateEventUserRequest.getTitle());
         }
 
+        if (updateEventUserRequest.getAllowComments() != null) {
+            event.setAllowComments(updateEventUserRequest.getAllowComments());
+        }
+
         eventRepository.save(event);
         return eventMapper.mapToEventFullDto(event);
     }

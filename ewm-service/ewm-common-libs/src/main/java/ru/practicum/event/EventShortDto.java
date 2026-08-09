@@ -43,4 +43,9 @@ public class EventShortDto {
     @NotBlank(message = "Заголовок события обязателен")
     @Size(min = 3, max = 120, message = "Заголовок должен содержать от 3 до 120 символов")
     private String title;
+
+    private Boolean allowComments = true;
+
+    @PositiveOrZero(message = "Количество комментариев не может быть отрицательным")
+    private Long commentsCount = 0L;
 }

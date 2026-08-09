@@ -71,4 +71,11 @@ public class Event {
     private String title;
 
     private Long views;
+
+    @Column(name = "allow_comments", nullable = false)
+    @Builder.Default
+    private Boolean allowComments = true;
+
+    @Builder.Default
+    private Long commentsCount = 0L;
 }

@@ -148,6 +148,10 @@ public class EventAdminServiceImpl implements EventAdminService {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
 
+        if (updateEventAdminRequest.getAllowComments() != null) {
+            event.setAllowComments(updateEventAdminRequest.getAllowComments());
+        }
+
         eventRepository.save(event);
 
         long confirmedRequests = participationRequestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED);
