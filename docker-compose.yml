@@ -34,7 +34,7 @@ services:
   ewm-service:
     build:
       context: .
-      dockerfile: ewm-service/Dockerfile
+      dockerfile: ewm-service/ewm-gateway/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -50,6 +50,36 @@ services:
       - "5433:5432"
     volumes:
       - pgdata-ewm:/var/lib/postgresql/data
+
+  ewm-admin:
+    build:
+      context: .
+      dockerfile: ewm-service/ewn-service-admin/Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - ewm-db
+      - stats-server
+
+  ewm-public:
+    build:
+      context: .
+      dockerfile: ewm-service/ewm-service-public/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - ewm-db
+      - stats-server
+
+  ewm-private:
+    build:
+      context: .
+      dockerfile: ewm-service/ewm-service-private/Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - ewm-db
+      - stats-server
 
 volumes:
   pgdata:
