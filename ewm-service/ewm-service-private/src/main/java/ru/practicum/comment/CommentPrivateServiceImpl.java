@@ -55,7 +55,6 @@ public class CommentPrivateServiceImpl implements CommentPrivateService {
                 .build();
 
         Comment savedComment = commentRepository.save(comment);
-
         eventRepository.incrementCommentsCount(eventId);
 
         return commentMapper.mapToCommentDto(savedComment);

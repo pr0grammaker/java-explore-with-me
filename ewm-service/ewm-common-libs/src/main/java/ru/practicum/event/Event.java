@@ -77,5 +77,6 @@ public class Event {
     private Boolean allowComments = true;
 
     @Builder.Default
+    @Column(name = "comments_count")
     private Long commentsCount = 0L;
 }

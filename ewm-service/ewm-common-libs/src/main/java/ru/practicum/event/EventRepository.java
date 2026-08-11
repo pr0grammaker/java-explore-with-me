@@ -91,11 +91,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     boolean existsByCategoryId(Long catId);
 
-    @Modifying
-    @Query("UPDATE Event e SET e.commentsCount = e.commentsCount + 1 WHERE e.id = :eventId")
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Event e SET e.commentsCount = COALESCE(e.commentsCount, 0) + 1 WHERE e.id = :eventId")
     void incrementCommentsCount(@Param("eventId") Long eventId);
 
-    @Modifying
-    @Query("UPDATE Event e SET e.commentsCount = e.commentsCount - 1 WHERE e.id = :eventId AND e.commentsCount > 0")
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Event e SET e.commentsCount = CASE WHEN e.commentsCount > 0 THEN e.commentsCount - 1 ELSE 0 END WHERE e.id = :eventId")
     void decrementCommentsCount(@Param("eventId") Long eventId);
 }
