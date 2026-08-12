@@ -76,6 +76,7 @@ public class EventServiceImpl implements EventService {
                 .state(EventState.PENDING)
                 .title(eventShortDto.getTitle())
                 .views(0L)
+                .allowComments(eventShortDto.getAllowComments() != null ? eventShortDto.getAllowComments() : true)
                 .build();
 
         boolean exists = eventRepository.existsByLocationLatAndLocationLonAndEventDate(
