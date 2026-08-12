@@ -31,7 +31,7 @@ public class ParticipationRequestController {
                 .body(participationRequestService.createParticipationRequest(userId, eventId));
     }
 
-    @PatchMapping("{requestId}/cancel")
+    @PatchMapping("/{requestId}/cancel")
     public ResponseEntity<ParticipationRequestDto> updateParticipationRequest(
             @PathVariable("userId") Long userId,
             @PathVariable("requestId") Long requestId

@@ -34,26 +34,26 @@ public interface EventPrivateHttpClient {
             @Valid @RequestBody EventShortDto eventShortDto
     );
 
-    @GetExchange("{eventId}")
+    @GetExchange("/{eventId}")
     ResponseEntity<EventFullDto> getUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
     );
 
-    @PatchExchange("{eventId}")
+    @PatchExchange("/{eventId}")
     ResponseEntity<EventFullDto> updateUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
             @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest
     );
 
-    @GetExchange("{eventId}/requests")
+    @GetExchange("/{eventId}/requests")
     ResponseEntity<Collection<ParticipationRequestDto>> getUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
     );
 
-    @PatchExchange("{eventId}/requests")
+    @PatchExchange("/{eventId}/requests")
     ResponseEntity<EventRequestStatusUpdateResult> updateUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,

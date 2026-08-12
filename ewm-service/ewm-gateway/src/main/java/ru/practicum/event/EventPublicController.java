@@ -34,7 +34,7 @@ public class EventPublicController {
                         onlyAvailable, sort, from, size).getBody());
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EventFullDto> getEventById(
             @PathVariable("id") Long id
     ) {

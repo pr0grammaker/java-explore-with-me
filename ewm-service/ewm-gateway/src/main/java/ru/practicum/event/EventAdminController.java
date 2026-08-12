@@ -31,7 +31,7 @@ public class EventAdminController {
                 .getEvents(users, states, categories, rangeStart, rangeEnd, from, size).getBody());
     }
 
-    @PatchMapping("{eventId}")
+    @PatchMapping("/{eventId}")
     public ResponseEntity<EventFullDto> updateEvent(
             @PathVariable Long eventId,
             @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest

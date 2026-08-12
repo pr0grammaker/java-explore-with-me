@@ -33,7 +33,7 @@ public interface EventAdminHttpClient {
             @RequestParam(defaultValue = "10") int size
     );
 
-    @PatchExchange("{eventId}")
+    @PatchExchange("/{eventId}")
     ResponseEntity<EventFullDto> updateEvent(
             @PathVariable Long eventId,
             @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest

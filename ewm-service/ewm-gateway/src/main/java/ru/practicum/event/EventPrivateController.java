@@ -34,7 +34,7 @@ public class EventPrivateController {
                 .body(eventPrivateHttpClient.createEvent(userId, eventShortDto).getBody());
     }
 
-    @GetMapping("{eventId}")
+    @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> getUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
@@ -42,7 +42,7 @@ public class EventPrivateController {
         return ResponseEntity.ok().body(eventPrivateHttpClient.getUserEventById(userId, eventId).getBody());
     }
 
-    @PatchMapping("{eventId}")
+    @PatchMapping("/{eventId}")
     public ResponseEntity<EventFullDto> updateUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
@@ -52,7 +52,7 @@ public class EventPrivateController {
                 .updateUserEventById(userId, eventId, updateEventUserRequest).getBody());
     }
 
-    @GetMapping("{eventId}/requests")
+    @GetMapping("/{eventId}/requests")
     public ResponseEntity<Collection<ParticipationRequestDto>> getUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
@@ -61,7 +61,7 @@ public class EventPrivateController {
                 .body(eventPrivateHttpClient.getUserEventRequestsByUserId(userId, eventId).getBody());
     }
 
-    @PatchMapping("{eventId}/requests")
+    @PatchMapping("/{eventId}/requests")
     public ResponseEntity<EventRequestStatusUpdateResult> updateUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
