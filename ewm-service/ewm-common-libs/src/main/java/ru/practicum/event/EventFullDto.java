@@ -31,13 +31,15 @@ public class EventFullDto {
     private UserShortDto initiator;
     private Location location;
     private Boolean paid;
-    private Integer participantLimit = 0;
+    private Integer participantLimit;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    private Boolean requestModeration = true;
+    private Boolean requestModeration;
     private EventState state;
     private String title;
     private Long views;
+    private Boolean allowComments;
+    private Long commentsCount;
 }

@@ -22,7 +22,7 @@ public interface CategoryHttpAdminClient {
     @PostExchange
     ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody NewCategoryDto newCategoryDto);
 
-    @DeleteExchange("{catId}")
+    @DeleteExchange("/{catId}")
     void deleteCategory(@PathVariable Long catId);
 
     @PatchExchange("{catId}")

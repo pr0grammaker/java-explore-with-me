@@ -16,6 +16,7 @@ import ru.practicum.user.User;
 import ru.practicum.user.UserRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -142,14 +143,19 @@ public class AdminAppExploreWithMeEventAdminServiceTest {
 
     @Test
     void getEvents_ReturnsEventsForUserAndCategory() {
-        EventFullDto dto = createEventFullDto(EventState.PUBLISHED, LocalDateTime.now().plusDays(1));
+        LocalDateTime eventDate = LocalDateTime.now().plusDays(1);
+        EventFullDto dto = createEventFullDto(EventState.PUBLISHED, eventDate);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String rangeStart = eventDate.minusDays(1).format(formatter);
+        String rangeEnd = eventDate.plusDays(1).format(formatter);
 
         var result = eventAdminService.getEvents(
                 List.of(dto.getInitiator().getId()),
                 List.of("PUBLISHED"),
                 List.of(dto.getCategory().getId()),
-                "2026-08-01 00:00:00",
-                "2026-08-10 23:59:59",
+                rangeStart,
+                rangeEnd,
                 0,
                 10
         );

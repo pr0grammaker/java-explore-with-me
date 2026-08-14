@@ -22,7 +22,7 @@ public class CompilationAdminController {
                 .body(compilationAdminHttpClient.addCompilation(newCompilationDto).getBody());
     }
 
-    @DeleteMapping("{compId}")
+    @DeleteMapping("/{compId}")
     public ResponseEntity<Void> deleteCompilation(
             @PathVariable("compId") Long compId
     ) {
@@ -30,7 +30,7 @@ public class CompilationAdminController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("{compId}")
+    @PatchMapping("/{compId}")
     public ResponseEntity<CompilationDto> updateCompilation(
             @PathVariable("compId") Long compId,
             @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest

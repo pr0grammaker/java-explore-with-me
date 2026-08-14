@@ -30,7 +30,7 @@ public interface EventPublicHttpClient {
             @RequestParam(defaultValue = "10") int size
     );
 
-    @GetExchange("{id}")
+    @GetExchange("/{id}")
     ResponseEntity<EventFullDto> getEventById(
             @PathVariable("id") Long id
     );

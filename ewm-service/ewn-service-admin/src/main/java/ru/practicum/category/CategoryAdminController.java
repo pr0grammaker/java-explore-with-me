@@ -17,13 +17,13 @@ public class CategoryAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryAdminService.addCategory(newCategoryDto));
     }
 
-    @DeleteMapping("{catId}")
+    @DeleteMapping("/{catId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long catId) {
         categoryAdminService.deleteCat(catId);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("{catId}")
+    @PatchMapping("/{catId}")
     public ResponseEntity<CategoryDto> updateCategory(
             @PathVariable("catId") Long catId,
             @Valid @RequestBody NewCategoryDto newCategoryDto

@@ -23,7 +23,7 @@ public interface CompilationPublicHttpClient {
             @RequestParam(defaultValue = "10") int size
     );
 
-    @GetExchange("{compId}")
+    @GetExchange("/{compId}")
     ResponseEntity<CompilationDto> getCompilationById(
             @PathVariable("compId") Long compId
     );

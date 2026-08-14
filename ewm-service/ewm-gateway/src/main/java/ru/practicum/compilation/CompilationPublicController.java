@@ -23,7 +23,7 @@ public class CompilationPublicController {
         return ResponseEntity.ok().body(compilationPublicHttpClient.getAllCompilations(pinned, from, size).getBody());
     }
 
-    @GetMapping("{compId}")
+    @GetMapping("/{compId}")
     public ResponseEntity<CompilationDto> getCompilationById(
             @PathVariable("compId") Long compId
     ) {

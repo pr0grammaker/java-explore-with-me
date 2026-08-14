@@ -24,12 +24,12 @@ public interface CompilationAdminHttpClient {
             @RequestBody @Valid NewCompilationDto newCompilationDto
     );
 
-    @DeleteExchange("{compId}")
+    @DeleteExchange("/{compId}")
     void deleteCompilation(
             @PathVariable("compId") Long compId
     );
 
-    @PatchExchange("{compId}")
+    @PatchExchange("/{compId}")
     ResponseEntity<CompilationDto> updateCompilation(
             @PathVariable("compId") Long compId,
             @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest

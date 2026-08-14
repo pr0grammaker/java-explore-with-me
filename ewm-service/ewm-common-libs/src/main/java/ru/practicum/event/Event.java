@@ -3,6 +3,8 @@ package ru.practicum.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.category.Category;
 import ru.practicum.user.User;
 
@@ -45,6 +47,7 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User initiator;
 
     @Embedded
@@ -71,4 +74,12 @@ public class Event {
     private String title;
 
     private Long views;
+
+    @Column(name = "allow_comments", nullable = false)
+    @Builder.Default
+    private Boolean allowComments = true;
+
+    @Builder.Default
+    @Column(name = "comments_count")
+    private Long commentsCount = 0L;
 }

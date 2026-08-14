@@ -32,7 +32,7 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(eventService.addEvent(userId, eventShortDto));
     }
 
-    @GetMapping("{eventId}")
+    @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> getUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
@@ -40,7 +40,7 @@ public class EventController {
         return ResponseEntity.ok().body(eventService.getUserEventById(userId, eventId));
     }
 
-    @PatchMapping("{eventId}")
+    @PatchMapping("/{eventId}")
     public ResponseEntity<EventFullDto> updateUserEventById(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,
@@ -49,7 +49,7 @@ public class EventController {
         return ResponseEntity.ok().body(eventService.updateUserEventById(userId, eventId, updateEventUserRequest));
     }
 
-    @GetMapping("{eventId}/requests")
+    @GetMapping("/{eventId}/requests")
     public ResponseEntity<Collection<ParticipationRequestDto>> getUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId
@@ -57,7 +57,7 @@ public class EventController {
         return ResponseEntity.ok().body(eventService.getUserEventRequestsByUserId(userId, eventId));
     }
 
-    @PatchMapping("{eventId}/requests")
+    @PatchMapping("/{eventId}/requests")
     public ResponseEntity<EventRequestStatusUpdateResult> updateUserEventRequestsByUserId(
             @PathVariable("userId") Long userId,
             @PathVariable("eventId") Long eventId,

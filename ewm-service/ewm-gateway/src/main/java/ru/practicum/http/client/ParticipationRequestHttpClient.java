@@ -28,7 +28,7 @@ public interface ParticipationRequestHttpClient {
             @RequestParam("eventId") Long eventId
     );
 
-    @PatchExchange("{requestId}/cancel")
+    @PatchExchange("/{requestId}/cancel")
     ResponseEntity<ParticipationRequestDto> updateParticipationRequest(
             @PathVariable("userId") Long userId,
             @PathVariable("requestId") Long requestId

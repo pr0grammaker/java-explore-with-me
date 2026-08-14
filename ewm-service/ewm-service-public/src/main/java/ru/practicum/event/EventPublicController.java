@@ -34,7 +34,7 @@ public class EventPublicController {
                         onlyAvailable, sort, from, size, request));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EventFullDto> getEventById(
             @PathVariable("id") Long id,
             HttpServletRequest request

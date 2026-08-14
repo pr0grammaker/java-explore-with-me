@@ -61,5 +61,20 @@ public class ClientsConfig {
         return httpServiceProxyPublicFactory.createClient(CompilationPublicHttpClient.class);
     }
 
+    @Bean
+    public CommentPrivateHttpClient commentPrivateHttpClient() {
+        return httpServiceProxyPrivateFactory.createClient(CommentPrivateHttpClient.class);
+    }
+
+    @Bean
+    public CommentPublicHttpClient commentPublicHttpClient() {
+        return httpServiceProxyPublicFactory.createClient(CommentPublicHttpClient.class);
+    }
+
+    @Bean
+    public CommentAdminHttpClient commentAdminHttpClient() {
+        return httpServiceProxyAdminFactory.createClient(CommentAdminHttpClient.class);
+    }
+
 }
 
